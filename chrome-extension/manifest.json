@@ -6,6 +6,8 @@
 	"description": "",
 
 	"permissions": [
+		"storage",
+		"contextMenus",
 		"notifications"
 	],
 
