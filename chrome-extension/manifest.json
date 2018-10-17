@@ -6,6 +6,7 @@
 	"description": "",
 
 	"permissions": [
+		"https://*.slack.com/*",
 		"storage",
 		"contextMenus",
 		"notifications"
