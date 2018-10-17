@@ -31,6 +31,13 @@ chrome.storage.local.get({
 		}
 	}, true);
 
+	document.body.addEventListener('dragenter', evt => {
+		if (!isTargetDomain()) return;
+		if (evt.dataTransfer.types.includes('Files')) {
+			evt.stopPropagation();
+		}
+	}, true);
+
 	document.body.addEventListener('drop', evt => {
 		if (!isTargetDomain()) return;
 		if (evt.dataTransfer.files.length) {
