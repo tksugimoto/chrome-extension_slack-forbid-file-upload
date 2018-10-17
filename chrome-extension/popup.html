@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<style>
+		body {
+			width: 350px;
+		}
+		#domain {
+			font-weight: bold;
+		}
+		label,
+		label input {
+			cursor: pointer;
+		}
+		label * {
+			user-select: none;
+			vertical-align: middle;
+		}
+	</style>
+</head>
+<body>
+	<p id="domain"></p>
+	<p>
+		<label>
+			<input type="checkbox" id="forbid-checkbox">
+			<span>
+				このSlackへのファイルアップロードを禁止する
+			</span>
+		</label>
+	</p>
+	<script src="popup-script.js"></script>
+</body>
+</html>
