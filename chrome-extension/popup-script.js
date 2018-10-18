@@ -65,11 +65,33 @@ chrome.tabs.query({
 		forbidCheckbox.checked = targetDomains.includes(currentDomain);
 	};
 
-	TargetDomains.load().then(updateCheckboxStatus);
+	const blockListContainer = document.getElementById('block-list-container');
+
+	const updateBlockList = targetDomains => {
+		blockListContainer.innerText = '';
+		if (!targetDomains.length) {
+			const li = document.createElement('li');
+			li.append('(なし)');
+			blockListContainer.append(li);
+			return;
+		}
+		targetDomains.forEach(targetDomain => {
+			const li = document.createElement('li');
+			li.append(targetDomain);
+			blockListContainer.append(li);
+		});
+	};
+
+	TargetDomains.load().then(targetDomains => {
+		updateCheckboxStatus(targetDomains);
+		updateBlockList(targetDomains);
+	});
 
 	chrome.storage.onChanged.addListener((changes, areaName) => {
 		if (areaName !== 'local') return;
 		if (!changes.targetDomains) return;
-		updateCheckboxStatus(changes.targetDomains.newValue || []);
+		const targetDomains = changes.targetDomains.newValue || [];
+		updateCheckboxStatus(targetDomains);
+		updateBlockList(targetDomains);
 	});
 });
