@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<style>
+		body {
+			width: 350px;
+		}
+		#domain {
+			font-weight: bold;
+		}
+		label,
+		label input {
+			cursor: pointer;
+		}
+		label * {
+			user-select: none;
+			vertical-align: middle;
+		}
+	</style>
+</head>
+<body>
+	<p id="domain"></p>
+	<p>
+		<label>
+			<input type="checkbox" id="allow-checkbox">
+			<span>
+				このSlackへのファイルアップロードを許可する
+			</span>
+		</label>
+	</p>
+	<hr>
+	<div>
+		<h2>アップロード許可Slackリスト</h2>
+		<ul id="white-list-container"></ul>
+	</div>
+	<script src="popup-script.js"></script>
+</body>
+</html>
