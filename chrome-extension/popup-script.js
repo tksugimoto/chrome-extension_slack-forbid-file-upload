@@ -1,6 +1,6 @@
-const TargetDomains = (() => {
+const AllowedDomains = (() => {
 	let promise = Promise.resolve();
-	const key = 'targetDomains';
+	const key = 'allowedDomains';
 	const load = () => {
 		return promise = promise.then(() => {
 			return new Promise(resolve => {
@@ -13,25 +13,25 @@ const TargetDomains = (() => {
 		});
 	};
 	const add = domain => {
-		return promise = load().then(targetDomains => {
-			const newTargetDomains = targetDomains.filter(d => d !== domain).concat(domain);
+		return promise = load().then(allowedDomains => {
+			const newAllowedDomains = allowedDomains.filter(d => d !== domain).concat(domain);
 			return new Promise(resolve => {
 				chrome.storage.local.set({
-					[key]: newTargetDomains,
+					[key]: newAllowedDomains,
 				}, () => {
-					resolve(newTargetDomains);
+					resolve(newAllowedDomains);
 				});
 			});
 		});
 	};
 	const remove = domain => {
-		return promise = load().then(targetDomains => {
-			const newTargetDomains = targetDomains.filter(d => d !== domain);
+		return promise = load().then(allowedDomains => {
+			const newAllowedDomains = allowedDomains.filter(d => d !== domain);
 			return new Promise(resolve => {
 				chrome.storage.local.set({
-					[key]: newTargetDomains,
+					[key]: newAllowedDomains,
 				}, () => {
-					resolve(newTargetDomains);
+					resolve(newAllowedDomains);
 				});
 			});
 		});
@@ -51,47 +51,47 @@ chrome.tabs.query({
 	const currentDomain = new URL(currentTab.url).host;
 	document.getElementById('domain').innerText = currentDomain;
 
-	const forbidCheckbox = document.getElementById('forbid-checkbox');
+	const allowCheckbox = document.getElementById('allow-checkbox');
 
-	forbidCheckbox.addEventListener('change', evt => {
+	allowCheckbox.addEventListener('change', evt => {
 		if (evt.target.checked) {
-			TargetDomains.add(currentDomain);
+			AllowedDomains.add(currentDomain);
 		} else {
-			TargetDomains.remove(currentDomain);
+			AllowedDomains.remove(currentDomain);
 		}
 	});
 
-	const updateCheckboxStatus = targetDomains => {
-		forbidCheckbox.checked = targetDomains.includes(currentDomain);
+	const updateCheckboxStatus = allowedDomains => {
+		allowCheckbox.checked = allowedDomains.includes(currentDomain);
 	};
 
-	const blockListContainer = document.getElementById('block-list-container');
+	const whiteListContainer = document.getElementById('white-list-container');
 
-	const updateBlockList = targetDomains => {
-		blockListContainer.innerText = '';
-		if (!targetDomains.length) {
+	const updateWhiteList = allowedDomains => {
+		whiteListContainer.innerText = '';
+		if (!allowedDomains.length) {
 			const li = document.createElement('li');
 			li.append('(なし)');
-			blockListContainer.append(li);
+			whiteListContainer.append(li);
 			return;
 		}
-		targetDomains.forEach(targetDomain => {
+		allowedDomains.forEach(allowedDomain => {
 			const li = document.createElement('li');
-			li.append(targetDomain);
-			blockListContainer.append(li);
+			li.append(allowedDomain);
+			whiteListContainer.append(li);
 		});
 	};
 
-	TargetDomains.load().then(targetDomains => {
-		updateCheckboxStatus(targetDomains);
-		updateBlockList(targetDomains);
+	AllowedDomains.load().then(allowedDomains => {
+		updateCheckboxStatus(allowedDomains);
+		updateWhiteList(allowedDomains);
 	});
 
 	chrome.storage.onChanged.addListener((changes, areaName) => {
 		if (areaName !== 'local') return;
-		if (!changes.targetDomains) return;
-		const targetDomains = changes.targetDomains.newValue || [];
-		updateCheckboxStatus(targetDomains);
-		updateBlockList(targetDomains);
+		if (!changes.allowedDomains) return;
+		const allowedDomains = changes.allowedDomains.newValue || [];
+		updateCheckboxStatus(allowedDomains);
+		updateWhiteList(allowedDomains);
 	});
 });
