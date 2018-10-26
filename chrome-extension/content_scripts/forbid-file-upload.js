@@ -28,6 +28,7 @@ chrome.storage.local.get({
 		if (evt.clipboardData.files.length) {
 			notifyMessage('ファイル paste は禁止されています');
 			evt.stopPropagation();
+			evt.preventDefault();
 		}
 	}, true);
 
