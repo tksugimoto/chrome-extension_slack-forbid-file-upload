@@ -25,9 +25,11 @@ chrome.storage.local.get({
 
 	document.body.addEventListener('paste', evt => {
 		if (isAllowedDomain()) return;
+		if (evt.clipboardData.types.includes('text/plain')) return;
 		if (evt.clipboardData.files.length) {
 			notifyMessage('ファイル paste は禁止されています');
 			evt.stopPropagation();
+			evt.preventDefault();
 		}
 	}, true);
 
